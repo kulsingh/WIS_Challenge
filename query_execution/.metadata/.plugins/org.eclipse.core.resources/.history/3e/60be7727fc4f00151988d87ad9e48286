@@ -1,0 +1,27 @@
+package etienne.dbpedia_execution;
+
+public class Starter {
+	
+    public static void main( String[] args )
+    {
+    	
+  	   String queryString = "prefix dbpedia: <http://dbpedia.org/resource/>"
+  	   		+ "	prefix dbpedia-owl: <http://dbpedia.org/ontology/> "
+  	   		+ "prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>"
+  	   		+ "select (str(?label) as ?strLabel) "+
+               "where {"+
+               "?place a dbpedia-owl:PopulatedPlace ;"+
+               "dbpedia-owl:country dbpedia:United_States ;"+
+               "rdfs:label ?label"+                                
+               "filter langMatches( lang(?label), 'en' )"+
+               "limit 10"+
+               "}";
+    	
+    	
+    	DBPediaExecution ex = new DBPediaExecution();
+    	
+    	ex.executeQuery(queryString);
+    
+    }
+
+}

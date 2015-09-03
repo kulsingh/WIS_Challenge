@@ -1,0 +1,39 @@
+package etienne.dbpedia_execution;
+
+public class Starter {
+	
+    public static void main( String[] args )
+    {
+    	org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
+    	
+    	
+    	// input AnswerType
+    	
+    	String answerType = "yoga:Actress139042u34"; 
+    	
+    	// (1) Execute Query
+    	
+    	String queryString = "PREFIX foaf:  <http://xmlns.com/foaf/0.1/> "
+    		+ "SELECT ?name "
+    	    + "WHERE { "
+    		+    "?person foaf:name ?name . "
+    		+ "} limit 10";
+    	
+    	
+    	String askQuery = "PREFIX prop: <http://dbpedia.org/property/> " +
+"ASK " +
+"{ " +
+ " <http://dbpedia.org/resource/Amazon_River> prop:length ?amazon . " +
+ " <http://dbpedia.org/resource/Nile> prop:length ?nile . " +
+ " FILTER(?amazon < ?nile) . " +
+ "}";
+
+    	DBPediaExecution ex = new DBPediaExecution();    	
+    	ex.executeQuery(askQuery);
+    	
+    	
+    	
+    
+    }
+
+}

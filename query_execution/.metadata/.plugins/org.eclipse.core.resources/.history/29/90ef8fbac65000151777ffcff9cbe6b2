@@ -1,0 +1,65 @@
+package etienne.dbpedia_execution;
+
+import org.apache.jena.query.Query;
+import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QueryFactory;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
+
+public class DBPediaExecution {
+
+	public void executeQuery(String queryString, QueryType queryType, String answerType) {
+
+		// (1) Execute Query
+		Query query = QueryFactory.create(queryString);
+		
+		QueryExecution qexec = QueryExecutionFactory.sparqlService(
+				"http://dbpedia.org/sparql", query);
+
+		// Analyze results
+		
+		try {
+			
+			ResultSet results;
+			
+			switch(queryType)
+			{
+				case ASK: 
+					Boolean queryresult = qexec.execAsk();
+					
+					// ,,,
+					
+					break;
+				case SELECT:
+					results = qexec.execSelect();
+					
+					for (; results.hasNext();) {
+						QuerySolution soln = results.nextSolution();
+					
+					// ...
+					
+					break; 
+				case COUNT:
+					
+					results = qexec.execSelect();
+					
+					for (; results.hasNext();) {
+						QuerySolution soln = results.nextSolution();
+				
+					break;	
+			}
+	
+
+		//		System.out.println(soln.get("?name"));
+			}
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		finally {
+			qexec.close();
+		}
+	}
+}

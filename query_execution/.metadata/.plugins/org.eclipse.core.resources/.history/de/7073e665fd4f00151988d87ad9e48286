@@ -1,0 +1,22 @@
+package etienne.dbpedia_execution;
+
+public class Starter {
+	
+    public static void main( String[] args )
+    {
+    	
+    	String queryString = "PREFIX pr:<http://xmlns.com/foaf/0.1/>\n" +
+                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"+
+                "SELECT DISTINCT ?s ?label WHERE {" +                              "?s rdfs:label ?label . "+
+                "?s a pr:Person . "+
+                "FILTER (lang(?label) = 'en') . "+
+                "?label bif:contains \""+str+"\" ."+
+                "}";
+    	
+    	DBPediaExecution ex = new DBPediaExecution();
+    	
+    	ex.executeQuery(queryString);
+    
+    }
+
+}

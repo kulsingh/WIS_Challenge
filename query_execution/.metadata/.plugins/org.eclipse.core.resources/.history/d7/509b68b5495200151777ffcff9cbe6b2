@@ -1,0 +1,98 @@
+package etienne.dbpedia_execution;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.json.JSONObject;
+
+public class Starter {
+	
+    public static void main( String[] args )
+    {
+    	org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
+
+    	/*
+    	String originalQuestion = "Is Natalie Portman an Actress";
+    	
+    	String answerType = "";
+    	
+    	// QueryType ASK
+    	
+    	String queryString = "PREFIX foaf: <http://xmlns.com/foaf/0.1/> " +
+    						"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " +
+    						"ASK { " +
+    						"?c foaf:name \"Natalie Portman\"@en. " +
+    						"?c rdf:type foaf:Person . " +
+    						"}";
+    	
+    	DBPediaExecution ex = new DBPediaExecution();    	
+    	ex.executeQuery(originalQuestion, queryString, QueryType.ASK, answerType);  	
+    	*/
+  
+    
+    	//---------------------------------------------------------------------
+//    	String originalQuestion = "Who is the wife of Barack Obama";
+//    	
+//    	String answerType = "foaf:Person";
+//    	
+//    	// QueryType ASK
+//    	
+//    	String queryString =
+//        		"PREFIX foaf: <http://xmlns.com/foaf/0.1/> " +
+//        		"PREFIX dc:   <http://purl.org/dc/elements/1.1/> " +
+//        		"PREFIX dbp: <http://dbpedia.org/property/> " + 
+//        		"PREFIX xsd:   <http://www.w3.org/2001/XMLSchema#> " +
+//        		"SELECT ?c " +
+//        		 "WHERE { ?x foaf:name \"Barack Obama\"@en . " +
+//        		 "        ?x dbp:spouse ?c .}";	
+    	
+    	//--------------------------------------------------------------------
+    	
+    	String originalQuestion = "How many languages are spoken in Turkmenistan?";
+    	
+    	String answerType = "";
+    	
+    	String queryString = "PREFIX dbo: <http://dbpedia.org/ontology/> " +
+    						 "PREFIX res: <http://dbpedia.org/resource/> " +
+    						 "SELECT COUNT(DISTINCT ?x) " +
+    						 "WHERE { " +
+    						 "res:Turkmenistan dbo:language ?x . " +
+    						 "} "; 
+    	
+    	
+    	List<String> questionInstances = new ArrayList<String>(Arrays.asList("Natalie Portman", "Actress"));
+    	
+    	
+    	
+    	Translator t = new Translator();
+    	
+    
+    	String jsonString = "{\"dataModel\":{\"instances\":[\"Nile\"],\"values\":[],\"categories\":[],\"relations\":[\"start\"]},\"QueryType\":\"SELECT\"}";
+
+    	
+    	JSONObject jsonObject = new JSONObject(jsonString);
+    	
+    	
+    	
+    	
+    	originalQuestion = jsonObject.getString("Question");
+    	answerType = jsonObject.getString("AnswerType");
+    	String queryTypeString = jsonObject.getString("QueryType"); 
+    	questionInstances = 
+    	
+   
+//
+System.out.println(t.extractListFromJson(jsonString,"dataModel","instances"));
+        System.out.println(t.extractObjectFromJson(jsonString, "QueryType"));
+    	
+    	
+    	
+    	
+    	ExecutionEnvironment ex = new ExecutionEnvironment(originalQuestion, queryString, QueryType.COUNT, answerType, questionInstances);    	
+    	
+    	JSONObject result = ex.processQuery();
+    	
+    	result.toString();
+    }
+}

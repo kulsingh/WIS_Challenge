@@ -1,0 +1,19 @@
+package etienne.dbpedia_execution;
+
+public class Starter {
+	
+    public static void main( String[] args )
+    {
+    	
+  	   String queryString = "prefix dbpedia: <http://dbpedia.org/resource/>"
+  	   		+ "	prefix dbpedia-owl: <http://dbpedia.org/ontology/> "
+  	   		+ "prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>"
+  	   		+ "select distinct ?Concept where {[] a ?Concept} LIMIT 100";
+    	
+    	DBPediaExecution ex = new DBPediaExecution();
+    	
+    	ex.executeQuery(queryString);
+    
+    }
+
+}

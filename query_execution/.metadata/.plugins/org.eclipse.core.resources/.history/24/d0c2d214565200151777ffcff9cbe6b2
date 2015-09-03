@@ -1,0 +1,92 @@
+package etienne.dbpedia_execution;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.json.JSONObject;
+
+public class Starter {
+	
+    public static void main( String[] args )
+    {
+    	org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
+
+    	/*
+    	String originalQuestion = "Is Natalie Portman an Actress";
+    	
+    	String answerType = "";
+    	
+    	// QueryType ASK
+    	
+    	String queryString =PREFIX foaf: <http://xmlns.com/foaf/0.1/> " +
+    						PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>  +
+    						ASK {  +
+    						?c foaf:name \"Natalie Portman\"@en.  +
+    						?c rdf:type foaf:Person .  +
+    					};
+    	
+    	DBPediaExecution ex = new DBPediaExecution();    	
+    	ex.executeQuery(originalQuestion, queryString, QueryType.ASK, answerType);  	
+    	*/
+  
+    
+    	//---------------------------------------------------------------------
+//    	String originalQuestion = "Who is the wife of Barack Obama";
+//    	
+//    	String answerType = "foaf:Person";
+//    	
+//    	// QueryType ASK
+//    	
+//    	String queryString =
+//        		"PREFIX foaf: <http://xmlns.com/foaf/0.1/> " +
+//        		"PREFIX dc:   <http://purl.org/dc/elements/1.1/> " +
+//        		"PREFIX dbp: <http://dbpedia.org/property/> " + 
+//        		"PREFIX xsd:   <http://www.w3.org/2001/XMLSchema#> " +
+//        		"SELECT ?c " +
+//        		 "WHERE { ?x foaf:name \"Barack Obama\"@en . " +
+//        		 "        ?x dbp:spouse ?c .}";	
+    	
+    	//--------------------------------------------------------------------
+
+    	
+    //  	String jsonString = "{\"Question\":\"Is Natalie Portman an Actress?\""
+    //  			+ ",\"Query\":\" PREFIX foaf: <http://xmlns.com/foaf/0.1/> ASK { ?x foaf:name \"Natalie Portman\"@en ; rdf:type foaf:Person .}\" "
+    //  			+ ",\"DataModel\":{\"instances\":[\"Actress\",\"Natalie Portman\"],\"values\":[],\"categories\":[],\"relations\":[\"start\"]},\"QueryType\":\"SELECT\"}";
+        	
+    	
+    
+    	String jsonString = "{\"AnswerType\":\"foaf:Person\",\"Question\":\"Who is the wife of Barack Obama?\",\"Query\":\"PREFIX foaf: <http://xmlns.com/foaf/0.1/> PREFIX dc: <http://purl.org/dc/elements/1.1/> PREFIX dbp: <http://dbpedia.org/property/> PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>  SELECT ?X  WHERE { ?y foaf:name \\\"Barack Obama\\\"@en . ?y dbp:spouse ?X .}\", \"DataModel\":{\"instances\":[\"Barack Obama\",\"Spouse\"],\"values\":[],\"categories\":[],\"relations\":[\"start\"]},\"QueryType\":\"SELECT\"}";
+    	
+    	
+    	//String jsonString = "{\"AnswerType\":\"Actor\",\"Question\":\"Is Natalie Portman an Actress?\",\"Query\":\" PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX foaf: <http://xmlns.com/foaf/0.1/> ASK { ?x foaf:name \\\"Natalie Portman\\\"@en ; rdf:type foaf:Person .}\", \"DataModel\":{\"instances\":[\"Actress\",\"Natalie Portman\"],\"values\":[],\"categories\":[],\"relations\":[\"start\"]},\"QueryType\":\"ASK\"}";
+    	
+    	Translator t = new Translator();
+    	
+    	JSONObject jsonObject = new JSONObject(jsonString);
+    	
+    	QueryType queryType;
+    	String originalQuestion = jsonObject.getString("Question");
+    	String answerType = jsonObject.getString("AnswerType");
+    	String queryTypeString = jsonObject.getString("QueryType"); 
+    	
+    	if(queryTypeString.equals("SELECT"))
+    		queryType = QueryType.SELECT;
+    	else if(queryTypeString.equals("ASK"))
+    		queryType = QueryType.ASK;
+    	else if (queryTypeString.equals("COUNT"))
+    		queryType = QueryType.COUNT;
+    	else 
+    		queryType = QueryType.MIN_MAX; 
+    
+    	String queryString = jsonObject.getString("Query");
+    	
+    	List<String> questionInstances = t.extractListFromJson(jsonString,"DataModel","instances");
+    	
+    	ExecutionEnvironment ex = new ExecutionEnvironment(originalQuestion, queryString, queryType, answerType, questionInstances);    	
+    	
+    	JSONObject result = ex.processQuery();
+    	
+    	result.toString();
+    }
+}
